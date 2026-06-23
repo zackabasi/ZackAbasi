@@ -1,66 +1,34 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+import fs from 'fs';
+import path from 'path';
+import HomeClient from './HomeClient';
+
+const URL_MAPPING: Record<string, string> = {
+  "NBC.webp": "https://www.youtube.com/watch?v=Mel60mMbIRE",
+  "Nelonen.webp": "https://www.youtube.com/watch?v=-40eUgBRI-M",
+  "RTL4.webp": "https://www.youtube.com/watch?v=MfH6QhcHB7g",
+  "alarabiya.webp": "https://www.youtube.com/watch?v=7YHf04P0Y-w",
+  "NPO.svg.webp": "https://studio.youtube.com/video/OOvciIVDtcs/edit",
+  "VOX.webp": "https://studio.youtube.com/video/Lve26UZCTfE/edit",
+  "rte.svg.webp": "https://www.tiktok.com/@zackabasi/video/7587822614966455574"
+};
 
 export default function Home() {
-  return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className={styles.intro}>
-          <h1>To get started, edit the page.tsx file.</h1>
-          <p>
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className={styles.secondary}
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
-  );
+  const logosDir = path.join(process.cwd(), 'public', 'music featured on');
+  let logos: { src: string; link: string }[] = [];
+
+  try {
+    if (fs.existsSync(logosDir)) {
+      const files = fs.readdirSync(logosDir);
+      logos = files
+        .filter(file => /\.(jpg|jpeg|png|gif|webp|svg)$/i.test(file))
+        .map(file => ({
+          src: `/music featured on/${file}`,
+          link: URL_MAPPING[file] || "#"
+        }));
+    }
+  } catch (error) {
+    console.error("Error reading featured logos directory", error);
+  }
+
+  return <HomeClient featuredLogos={logos} />;
 }
