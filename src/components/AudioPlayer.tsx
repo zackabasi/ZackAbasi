@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from 'react';
+import { usePathname } from 'next/navigation';
 import { useAudio } from '@/context/AudioContext';
 import styles from './AudioPlayer.module.css';
 import { Play, Pause, SkipForward, SkipBack } from 'lucide-react';
@@ -9,6 +10,7 @@ export default function AudioPlayer() {
   const { currentTrack, currentPlaylist, isPlaying, togglePlayPause, playNext, playPrevious, audioElement } = useAudio();
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
+  const pathname = usePathname();
 
   useEffect(() => {
     if (!audioElement) return;
@@ -44,7 +46,7 @@ export default function AudioPlayer() {
     return `${mins}:${secs.toString().padStart(2, '0')}`;
   };
 
-  if (!currentTrack) return null;
+  if (!currentTrack || pathname.startsWith('/studio')) return null;
 
   const hasNext = currentPlaylist.length > 0 && currentPlaylist.findIndex(t => t.id === currentTrack.id) < currentPlaylist.length - 1;
   const hasPrev = currentPlaylist.length > 0 && currentPlaylist.findIndex(t => t.id === currentTrack.id) > 0;

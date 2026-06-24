@@ -25,6 +25,8 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  if (pathname.startsWith('/studio')) return null;
+
   return (
     <nav className={`${styles.navbar} ${scrolled ? styles.scrolled : ''}`}>
       <Link href="/" aria-label="Home">
