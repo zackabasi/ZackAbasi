@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { Menu, X } from 'lucide-react';
 import styles from './Navbar.module.css';
 
 const navItems = [
@@ -15,6 +16,7 @@ const navItems = [
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const pathname = usePathname();
 
   useEffect(() => {
@@ -25,11 +27,23 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  useEffect(() => {
+    setMobileMenuOpen(false);
+  }, [pathname]);
+
+  useEffect(() => {
+    if (mobileMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+  }, [mobileMenuOpen]);
+
   if (pathname.startsWith('/studio')) return null;
 
   return (
     <nav className={`${styles.navbar} ${scrolled ? styles.scrolled : ''}`}>
-      <Link href="/" aria-label="Home">
+      <Link href="/" aria-label="Home" className={styles.logoLink} onClick={() => setMobileMenuOpen(false)}>
         <img 
           src="/logo.png" 
           alt="Zack Abasi Logo" 
@@ -58,6 +72,29 @@ export default function Navbar() {
           </Link>
         ))}
       </div>
+
+      <button 
+        className={styles.mobileMenuButton} 
+        onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+        aria-label="Toggle mobile menu"
+      >
+        {mobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
+      </button>
+
+      {mobileMenuOpen && (
+        <div className={styles.mobileMenu}>
+          {navItems.map((item) => (
+            <Link 
+              key={item.name} 
+              href={item.path} 
+              className={`${styles.mobileLink} ${pathname === item.path ? styles.active : ''}`}
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              {item.name}
+            </Link>
+          ))}
+        </div>
+      )}
     </nav>
   );
 }

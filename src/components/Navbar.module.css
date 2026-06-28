@@ -19,6 +19,10 @@
   border-bottom: 1px solid var(--border-color);
 }
 
+.logoLink {
+  z-index: 1001;
+}
+
 .logoImg {
   height: 45px;
   width: auto;
@@ -49,11 +53,57 @@
   color: var(--text-primary);
 }
 
+.mobileMenuButton {
+  display: none;
+  background: none;
+  border: none;
+  color: var(--text-primary);
+  cursor: pointer;
+  z-index: 1001;
+  padding: 0.5rem;
+}
+
+.mobileMenu {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background: rgba(10, 10, 10, 0.98);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  z-index: 1000;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+}
+
+.mobileLink {
+  font-size: 1.5rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  transition: color 0.2s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.mobileLink:hover, .mobileLink.active {
+  color: var(--text-primary);
+}
+
 @media (max-width: 768px) {
   .navLinks {
     display: none;
   }
   .navbar {
     padding: 1.5rem 1.5rem;
+  }
+  .mobileMenuButton {
+    display: block;
+  }
+  .mobileMenu {
+    display: flex;
   }
 }
