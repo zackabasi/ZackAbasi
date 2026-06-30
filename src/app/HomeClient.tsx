@@ -108,7 +108,7 @@ export default function HomeClient({
         </section>
       )}
 
-      <section className={styles.testimonialSection} style={{ borderBottom: 'none' }}>
+      <section className={styles.testimonialSection} style={{ borderBottom: 'none', paddingBottom: '3rem' }}>
         <div className="container">
           <h2 className={styles.sectionTitle}>Spreading Love &amp; Joy ❤️</h2>
           <div className={styles.testimonialGrid}>
@@ -132,7 +132,7 @@ export default function HomeClient({
         </div>
       </section>
 
-      <section className={styles.testimonialSection} style={{ borderBottom: 'none', paddingTop: 0 }}>
+      <section className={styles.testimonialSection} style={{ borderBottom: 'none', paddingTop: 0, paddingBottom: '3rem' }}>
         <div className="container">
           <h2 className={styles.sectionTitle} style={{ marginBottom: '3rem' }}>A Viral Celebration of Citizenship ☘️</h2>
           
@@ -161,7 +161,7 @@ export default function HomeClient({
       </section>
 
       {testimonial && (
-        <section className={styles.testimonialSection}>
+        <section className={styles.testimonialSection} style={{ paddingTop: '3rem' }}>
           <div className="container">
             <h2 className={styles.sectionTitle}>Testimonial</h2>
             <div className={styles.testimonialGrid}>
