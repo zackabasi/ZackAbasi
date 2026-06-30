@@ -134,27 +134,29 @@ export default function HomeClient({
 
       <section className={styles.testimonialSection} style={{ borderBottom: 'none', paddingTop: 0 }}>
         <div className="container">
-          <h2 className={styles.sectionTitle}>A Viral Celebration of Citizenship ☘️</h2>
-          <div style={{ maxWidth: '800px', margin: '0 auto', textAlign: 'center' }}>
-            <p className={styles.subtitle} style={{ margin: '0 auto 2.5rem auto', color: 'var(--text-primary)', lineHeight: '1.8' }}>
-              When I received my Irish citizenship, I knew there was only one way to celebrate: an electric cover of Thin Lizzy's iconic "Whiskey in the Jar". The performance quickly went viral on my custom ZA guitar, earning praise from the Department of Justice and making national headlines! Click the article below to read the full story.
-            </p>
-            <a 
-              href="https://lnkd.in/gW9JeZJJ" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className={styles.articleLink}
-            >
+          <h2 className={styles.sectionTitle} style={{ marginBottom: '3rem' }}>A Viral Celebration of Citizenship ☘️</h2>
+          
+          <a 
+            href="https://lnkd.in/gW9JeZJJ" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className={styles.articleCardHorizontal}
+          >
+            <div className={styles.articleCardImageContainer}>
               <img 
                 src="/Irish-article.webp" 
                 alt="Irish Citizenship Article" 
-                className={styles.articleImage}
+                className={styles.articleImageHorizontal}
               />
-              <div className={styles.readMoreOverlay}>
-                <span>Read Full Article</span>
-              </div>
-            </a>
-          </div>
+            </div>
+            <div className={styles.articleCardContent}>
+              <p className={styles.articleCardText}>
+                When I received my Irish citizenship, I knew there was only one way to celebrate: an electric cover of Thin Lizzy's iconic "Whiskey in the Jar". The performance quickly went viral on my custom ZA guitar, earning praise from the Department of Justice and making national headlines!
+              </p>
+              <span className={styles.readArticleBtn}>Read Full Article &rarr;</span>
+            </div>
+          </a>
+          
         </div>
       </section>
 
