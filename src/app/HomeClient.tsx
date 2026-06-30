@@ -108,6 +108,29 @@ export default function HomeClient({
         </section>
       )}
 
+      <section className={styles.testimonialSection} style={{ borderBottom: 'none' }}>
+        <div className="container">
+          <h2 className={styles.sectionTitle}>Spreading Love &amp; Joy ❤️</h2>
+          <div className={styles.testimonialGrid}>
+            <div className={styles.testimonialContent}>
+              <p className={styles.testimonialText} style={{ fontSize: '1.25rem', fontStyle: 'normal' }}>
+                I composed this Christmas tune for my local school winter performance, and it magically made its way to national radio in Ireland! Here is a special snippet from RTÉ Radio 1 when they broadcast it across the country on Christmas Eve.
+              </p>
+            </div>
+            <div className={styles.tiktokWrapper}>
+              <iframe 
+                src="https://www.tiktok.com/embed/v2/7587822614966455574" 
+                width="100%" 
+                height="100%" 
+                frameBorder="0" 
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                allowFullScreen
+              ></iframe>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {testimonial && (
         <section className={styles.testimonialSection}>
           <div className="container">
