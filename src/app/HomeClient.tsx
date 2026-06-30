@@ -108,7 +108,7 @@ export default function HomeClient({
         </section>
       )}
 
-      <section className={styles.testimonialSection} style={{ borderBottom: 'none', paddingBottom: '3rem' }}>
+      <section className={styles.testimonialSection} style={{ borderBottom: 'none', paddingTop: '3rem', paddingBottom: '3rem' }}>
         <div className="container">
           <h2 className={styles.sectionTitle}>Spreading Love &amp; Joy ❤️</h2>
           <div className={styles.testimonialGrid}>
