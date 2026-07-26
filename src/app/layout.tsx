@@ -16,7 +16,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Zack Abasi | Premium Artist",
+  title: "Zack Abasi | Official Website",
   description: "Official website of Zack Abasi.",
 };
 
