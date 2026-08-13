@@ -109,6 +109,34 @@ export default function HomeClient({
       )}
 
       <section className={styles.testimonialSection} style={{ borderBottom: 'none', paddingTop: '3rem', paddingBottom: '3rem' }}>
+        <div className="container" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center' }}>
+          <h2 className={styles.sectionTitle} style={{ marginBottom: '2rem' }}>Check out my debut EP, Sunrosa</h2>
+          
+          <div className={styles.videoWrapper} style={{ width: '100%', maxWidth: '800px', margin: '0 auto', marginBottom: '2rem' }}>
+            <iframe 
+              src="https://www.youtube.com/embed/nCvD1I76VAw" 
+              width="100%" 
+              height="100%" 
+              frameBorder="0" 
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+              allowFullScreen
+              title="Sunrosa EP"
+            ></iframe>
+          </div>
+
+          <p className={styles.testimonialText} style={{ fontSize: '1rem', fontStyle: 'normal', maxWidth: '800px', margin: '0 auto 2rem', color: 'var(--text-primary)' }}>
+            This project was supported by Meath County Council Arts Office and Creative Ireland through the Professional Artist Development Fund.
+          </p>
+
+          <div style={{ display: 'flex', justifyContent: 'center', gap: '3rem', flexWrap: 'wrap', alignItems: 'center', background: 'rgba(255, 255, 255, 0.85)', padding: '1rem 2rem', borderRadius: '8px' }}>
+            <img src="/Creative Ireland Logo_Gold.webp" alt="Creative Ireland" style={{ height: '60px', objectFit: 'contain' }} />
+            <img src="/Meath Arts Office Logo.webp" alt="Meath Arts Office" style={{ height: '60px', objectFit: 'contain' }} />
+            <img src="/Meath County Council Logo.webp" alt="Meath County Council" style={{ height: '60px', objectFit: 'contain' }} />
+          </div>
+        </div>
+      </section>
+
+      <section className={styles.testimonialSection} style={{ borderBottom: 'none', paddingTop: '3rem', paddingBottom: '3rem' }}>
         <div className="container">
           <h2 className={styles.sectionTitle}>Spreading Love &amp; Joy ❤️</h2>
           <div className={styles.testimonialGrid}>
