@@ -110,7 +110,7 @@ export default function HomeClient({
 
       <section className={styles.testimonialSection} style={{ borderBottom: 'none', paddingTop: '3rem', paddingBottom: '3rem' }}>
         <div className="container" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center' }}>
-          <h2 className={styles.sectionTitle} style={{ marginBottom: '2rem' }}>Check out my debut EP, Sunrosa</h2>
+          <h2 className={styles.sectionTitle} style={{ marginBottom: '2rem' }}>Introducing Sunrosa: My Debut Instrumental EP</h2>
           
           <div className={styles.videoWrapper} style={{ width: '100%', maxWidth: '800px', margin: '0 auto', marginBottom: '2rem' }}>
             <iframe 
@@ -128,10 +128,10 @@ export default function HomeClient({
             This project was supported by Meath County Council Arts Office and Creative Ireland through the Professional Artist Development Fund.
           </p>
 
-          <div style={{ display: 'flex', justifyContent: 'center', gap: '3rem', flexWrap: 'wrap', alignItems: 'center', background: 'rgba(255, 255, 255, 0.85)', padding: '1rem 2rem', borderRadius: '8px' }}>
-            <img src="/Creative Ireland Logo_Gold.webp" alt="Creative Ireland" style={{ height: '60px', objectFit: 'contain' }} />
-            <img src="/Meath Arts Office Logo.webp" alt="Meath Arts Office" style={{ height: '60px', objectFit: 'contain' }} />
-            <img src="/Meath County Council Logo.webp" alt="Meath County Council" style={{ height: '60px', objectFit: 'contain' }} />
+          <div style={{ display: 'flex', justifyContent: 'center', gap: '2rem', flexWrap: 'wrap', alignItems: 'center', background: 'rgba(10, 10, 10, 0.8)', padding: '0.75rem 1.5rem', borderRadius: '16px', border: '1px solid rgba(255, 255, 255, 0.5)', maxWidth: 'max-content' }}>
+            <img src="/Creative Ireland Logo_Gold.webp" alt="Creative Ireland" style={{ height: '45px', objectFit: 'contain' }} />
+            <img src="/Meath Arts Office Logo.webp" alt="Meath Arts Office" style={{ height: '45px', objectFit: 'contain' }} />
+            <img src="/Meath County Council Logo.webp" alt="Meath County Council" style={{ height: '45px', objectFit: 'contain' }} />
           </div>
         </div>
       </section>
