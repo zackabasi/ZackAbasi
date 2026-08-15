@@ -81,6 +81,23 @@
   color: var(--bg-primary);
 }
 
+.socialIcons {
+  display: flex;
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.socialLink {
+  color: var(--text-secondary);
+  transition: color 0.2s ease, transform 0.2s ease;
+  display: inline-flex;
+}
+
+.socialLink:hover {
+  color: var(--accent-primary);
+  transform: translateY(-2px);
+}
+
 .section {
   padding: 6rem 0;
 }
