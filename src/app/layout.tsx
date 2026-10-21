@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Outfit, Inter } from "next/font/google";
+import { Outfit } from "next/font/google";
 import "./globals.css";
 import { AudioProvider } from "@/context/AudioContext";
 import Navbar from "@/components/Navbar";
@@ -10,14 +10,29 @@ const outfit = Outfit({
   variable: "--font-outfit",
 });
 
-const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-inter",
-});
+const description = "Official website of Zack Abasi, Syrian-Irish composer, guitarist and oud player. Listen to his debut EP Sunrosa and music featured on NBC, RTL 4, NPO, VOX and RTÉ Radio 1.";
 
 export const metadata: Metadata = {
-  title: "Zack Abasi | Official Website",
-  description: "Official website of Zack Abasi.",
+  metadataBase: new URL("https://www.zackabasi.com"),
+  title: {
+    default: "Zack Abasi | Official Website",
+    template: "%s | Zack Abasi",
+  },
+  description,
+  openGraph: {
+    type: "website",
+    siteName: "Zack Abasi",
+    locale: "en_IE",
+    url: "/",
+    title: "Zack Abasi | Official Website",
+    description,
+  },
+  twitter: {
+    card: "summary_large_image",
+    creator: "@zackabasi",
+    title: "Zack Abasi | Official Website",
+    description,
+  },
 };
 
 export default function RootLayout({
@@ -26,7 +41,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${outfit.variable} ${inter.variable}`}>
+    <html lang="en" className={outfit.variable}>
       <body>
         <AudioProvider>
           <Navbar />

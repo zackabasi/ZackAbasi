@@ -5,7 +5,7 @@
   align-items: center;
   gap: 4rem;
   padding-top: 120px;
-  background-image: linear-gradient(to bottom, rgba(10, 10, 10, 0.8), rgba(10, 10, 10, 1)), url('/hero-bg.png');
+  background-image: linear-gradient(to bottom, rgba(10, 10, 10, 0.8), rgba(10, 10, 10, 1)), url('/hero-bg.webp');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -32,7 +32,27 @@
   object-fit: contain;
   width: auto;
   height: 100%;
+  max-width: 100%;
   filter: drop-shadow(0px 10px 30px rgba(212, 175, 55, 0.15));
+}
+
+/* Entrance motion runs in CSS from the first paint, so content never waits for JavaScript */
+.enter {
+  animation: enterUp 0.8s ease-out both;
+}
+
+.enterSide {
+  animation: enterSide 0.8s ease-out both;
+}
+
+@keyframes enterUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes enterSide {
+  from { opacity: 0; transform: translateX(50px); }
+  to { opacity: 1; transform: none; }
 }
 
 .quote {
@@ -180,10 +200,12 @@
 
 .carouselTrack {
   display: inline-block;
-  animation: scroll 25s linear infinite;
+  padding-block: 6px; /* room for the hover lift */
+  animation: scroll 40s linear infinite;
 }
 
-.carouselTrack:hover {
+.carouselTrack:hover,
+.carouselTrack:focus-within {
   animation-play-state: paused;
 }
 
@@ -192,10 +214,9 @@
   align-items: center;
   justify-content: center;
   background: rgba(255, 255, 255, 0.85); /* Light elegant BG so dark logos are visible */
-  backdrop-filter: blur(4px);
-  padding: 0.75rem 2rem;
-  border-radius: 8px;
-  margin: 0 1.5rem;
+  padding: 1rem 2.25rem;
+  border-radius: 10px;
+  margin: 0 1.25rem;
   vertical-align: middle;
   transition: transform 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
   cursor: pointer;
@@ -209,9 +230,40 @@
 }
 
 .carouselLogo {
-  height: 35px;
+  height: 52px;
   width: auto;
   object-fit: contain;
+}
+
+@media (max-width: 768px) {
+  .logoCard {
+    padding: 0.8rem 1.5rem;
+    margin: 0 0.75rem;
+  }
+  .carouselLogo {
+    height: 42px;
+  }
+}
+
+/* With reduced motion the logos sit still and wrap instead of scrolling */
+@media (prefers-reduced-motion: reduce) {
+  .carouselContainer {
+    white-space: normal;
+  }
+  .carouselContainer::before,
+  .carouselContainer::after {
+    display: none;
+  }
+  .carouselTrack {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem 0;
+    animation: none;
+  }
+  .carouselTrack > [aria-hidden="true"] {
+    display: none;
+  }
 }
 
 /* Testimonial Section */
@@ -301,6 +353,121 @@
     grid-template-columns: 1fr;
     gap: 3rem;
   }
+}
+
+@media (max-width: 768px) {
+  .testimonialContent {
+    padding: 1.75rem 1.5rem;
+  }
+  .sectionTitle {
+    font-size: 2rem;
+  }
+}
+
+/* Larry Flick quote */
+.flickQuote p {
+  font-size: 1.6rem;
+  line-height: 1.45;
+  font-style: italic;
+  color: var(--text-primary);
+  position: relative;
+  z-index: 1;
+  text-wrap: balance;
+}
+
+.quoteEmphasis {
+  color: var(--accent-primary);
+  font-style: normal;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.quoteAttribution {
+  margin-top: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.quoteAttribution cite {
+  font-style: normal;
+  font-weight: 600;
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--accent-primary);
+}
+
+.quoteAttribution span {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+}
+
+/* Sunrosa funders */
+.funderStrip {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+  align-items: center;
+  background: rgba(10, 10, 10, 0.8);
+  padding: 0.75rem 1.5rem;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  max-width: 100%;
+}
+
+.funderStrip img {
+  height: 45px;
+  width: auto;
+  max-width: 100%;
+  object-fit: contain;
+}
+
+/* BMG album cards: square covers, never cropped */
+.projectGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+}
+
+.projectCard {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+  transition: transform 0.3s ease;
+}
+
+.projectCard:hover {
+  transform: translateY(-10px);
+  color: inherit;
+}
+
+.projectCover {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+}
+
+.projectBody {
+  padding: 1.5rem;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.projectTitle {
+  font-size: 1.25rem;
+  margin-bottom: 0.5rem;
+  color: var(--text-primary);
+}
+
+.projectLink {
+  color: var(--accent-primary);
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
 .articleCardHorizontal {

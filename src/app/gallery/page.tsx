@@ -1,18 +1,31 @@
 import { client } from '@/sanity/lib/client';
-import { urlFor } from '@/sanity/lib/image';
+import { sizedImage } from '@/sanity/lib/image';
+import { pageMetadata } from '@/lib/seo';
 import GalleryClient from './GalleryClient';
 import fs from 'fs';
 import path from 'path';
 
 export const revalidate = 60; // revalidate every 60 seconds
 
+export const metadata = pageMetadata({
+  title: "Gallery",
+  description: "Photos of Zack Abasi on stage and in the studio, with electric guitar, acoustic guitar and oud.",
+  path: "/gallery",
+});
+
 export default async function GalleryPage() {
-  let images: string[] = [];
+  let images: { src: string; alt: string }[] = [];
 
   try {
-    const query = `*[_type == "galleryImage"] | order(order asc) { image }`;
+    const query = `*[_type == "galleryImage"] | order(order asc) { image, title }`;
     const data = await client.fetch(query);
-    images = data.map((item: any) => item.image ? urlFor(item.image).url() : null).filter(Boolean);
+    images = data
+      .filter((item: any) => item.image)
+      .map((item: any, idx: number) => ({
+        src: sizedImage(item.image, 900),
+        // CMS titles like "Image 1" aren't descriptions, so fall back to a plain one
+        alt: item.title && !/^image \d+$/i.test(item.title) ? item.title : `Zack Abasi, photo ${idx + 1}`
+      }));
   } catch (error) {
     console.error("Sanity error on gallery", error);
   }
@@ -25,9 +38,11 @@ export default async function GalleryPage() {
         const files = fs.readdirSync(galleryDir);
         images = files
           .filter(file => /\.(jpg|jpeg|png|gif|webp)$/i.test(file))
-          .map(file => `/gallery/${file}`);
+          .map((file, idx) => ({ src: `/gallery/${file}`, alt: `Zack Abasi, photo ${idx + 1}` }));
       }
-    } catch (error) {}
+    } catch (error) {
+      console.error("Error reading local gallery", error);
+    }
   }
 
   return <GalleryClient images={images} />;

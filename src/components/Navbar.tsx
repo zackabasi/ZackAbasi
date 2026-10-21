@@ -37,6 +37,10 @@ export default function Navbar() {
     } else {
       document.body.style.overflow = 'unset';
     }
+    if (!mobileMenuOpen) return;
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') setMobileMenuOpen(false); };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
   }, [mobileMenuOpen]);
 
   if (pathname.startsWith('/studio')) return null;
@@ -46,7 +50,7 @@ export default function Navbar() {
       <Link href="/" aria-label="Home" className={styles.logoLink} onClick={() => setMobileMenuOpen(false)}>
         <img 
           src="/logo.png" 
-          alt="Zack Abasi Logo" 
+          alt="Zack Abasi" 
           className={styles.logoImg}
           onError={(e) => {
             // Fallback to text if the image is missing
@@ -67,6 +71,7 @@ export default function Navbar() {
             key={item.name} 
             href={item.path} 
             className={`${styles.link} ${pathname === item.path ? styles.active : ''}`}
+            aria-current={pathname === item.path ? 'page' : undefined}
           >
             {item.name}
           </Link>
@@ -76,18 +81,21 @@ export default function Navbar() {
       <button 
         className={styles.mobileMenuButton} 
         onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-        aria-label="Toggle mobile menu"
+        aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
+        aria-expanded={mobileMenuOpen}
+        aria-controls="mobile-menu"
       >
-        {mobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
+        {mobileMenuOpen ? <X size={28} aria-hidden="true" /> : <Menu size={28} aria-hidden="true" />}
       </button>
 
       {mobileMenuOpen && (
-        <div className={styles.mobileMenu}>
+        <div className={styles.mobileMenu} id="mobile-menu">
           {navItems.map((item) => (
             <Link 
               key={item.name} 
               href={item.path} 
               className={`${styles.mobileLink} ${pathname === item.path ? styles.active : ''}`}
+              aria-current={pathname === item.path ? 'page' : undefined}
               onClick={() => setMobileMenuOpen(false)}
             >
               {item.name}

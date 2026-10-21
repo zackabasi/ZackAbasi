@@ -1,7 +1,5 @@
 "use client";
 
-import { motion } from "framer-motion";
-
 export default function MyStoryClient({ biography }: { biography: any }) {
   // Use fallback if Sanity is empty
   const title = biography?.header || "My story is your story!";
@@ -37,7 +35,7 @@ export default function MyStoryClient({ biography }: { biography: any }) {
           Imagine if your favorite artist, novelist, or poet had never existed or had decided not to pursue their passion. Something would be missing, right? That's why I am sharing my story with you—because this is ours. And I would also love to be a part of your story. By being myself, working on it, and growing it, I am also shaping the way for others and encouraging them to be themselves. So please, accept me as a friend by soul. We don't need to meet; the ignition of our hearts is what it takes to find peers dancing on the same frequency of love and celebration.
         </p>
         <p>
-          Please, be yourself! Accept it, love it, nourish it. That's the only way to find harmony within yourself and the world around you. It's the only way to solve the human problems that we have created. No charity has worked; no political campaign has been able to fulfill its objectives. But you and I can contribute to the real solution by simply being true to ourselves, by choosing love over fear, and by choosing love over fear, and by rebelling against the burdens of the past that no longer serve us. This is not about any outer protest, but about the rebellion of the spirit to transcend its own limitations, which are made of nothing but illusions.
+          Please, be yourself! Accept it, love it, nourish it. That's the only way to find harmony within yourself and the world around you. It's the only way to solve the human problems that we have created. No charity has worked; no political campaign has been able to fulfill its objectives. But you and I can contribute to the real solution by simply being true to ourselves, by choosing love over fear, and by rebelling against the burdens of the past that no longer serve us. This is not about any outer protest, but about the rebellion of the spirit to transcend its own limitations, which are made of nothing but illusions.
         </p>
         <p style={{ fontWeight: 600, color: 'var(--text-primary)' }}>
           Let's break them together.
@@ -51,9 +49,8 @@ export default function MyStoryClient({ biography }: { biography: any }) {
 
   return (
     <div className="container" style={{ paddingTop: '100px', paddingBottom: '80px' }}>
-      <motion.div 
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
+      <div 
+        className="animate-fade-in"
         style={{ maxWidth: '800px', margin: '0 auto' }}
       >
         <h1 style={{ marginBottom: '2rem', textAlign: 'center', fontSize: '3rem', letterSpacing: '-0.02em' }}>
@@ -63,18 +60,17 @@ export default function MyStoryClient({ biography }: { biography: any }) {
         <div style={{ marginBottom: '3rem', width: '100%', borderRadius: '8px', overflow: 'hidden', border: '1px solid var(--border-color)' }}>
           <img 
             src={coverUrl} 
-            alt={title} 
+            alt="A Hurrian hymn tablet from Ugarit, the oldest known written music, with ancient musicians" 
+            width={640}
+            height={360}
             style={{ width: '100%', height: 'auto', display: 'block' }} 
-            onError={(e) => {
-              e.currentTarget.src = "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&q=80&w=1200&h=600";
-            }}
           />
         </div>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1.8rem', color: 'var(--text-secondary)', fontSize: '1.125rem', lineHeight: 1.8 }}>
           {renderContent()}
         </div>
-      </motion.div>
+      </div>
     </div>
   );
 }

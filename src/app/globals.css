@@ -12,7 +12,6 @@
   --border-color: #27272a;
   
   --font-primary: var(--font-outfit), sans-serif;
-  --font-secondary: var(--font-inter), sans-serif;
 }
 
 * {
@@ -47,11 +46,45 @@ button {
   font-family: inherit;
 }
 
+/* Keyboard focus: a visible gold ring (mouse clicks don't show it) */
+:focus-visible {
+  outline: 2px solid var(--accent-primary);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
 /* Utilities */
 .container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 2rem;
+}
+
+/* On phones, sections nested inside the page container don't add a second set of side padding */
+@media (max-width: 768px) {
+  .container {
+    padding: 0 1.5rem; /* lines up with the nav bar */
+  }
+  .container .container {
+    padding: 0;
+  }
+}
+
+/* Gold call-to-action link (used where a page needs one outside the hero) */
+.button-primary {
+  display: inline-block;
+  padding: 1rem 2.5rem;
+  background: var(--accent-primary);
+  color: var(--bg-primary);
+  font-weight: 600;
+  border-radius: 4px;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.button-primary:hover {
+  background: var(--accent-hover);
+  color: var(--bg-primary);
+  transform: translateY(-2px);
 }
 
 /* Typography */
@@ -71,5 +104,14 @@ h2 { font-size: 3rem; letter-spacing: -0.01em; }
 }
 
 .animate-fade-in {
-  animation: fadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: fadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
