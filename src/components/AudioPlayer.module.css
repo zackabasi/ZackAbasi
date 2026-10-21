@@ -146,8 +146,14 @@
   transition: opacity 0.2s ease;
 }
 
-.progressBar:hover::-webkit-slider-thumb {
+.progressBar:hover::-webkit-slider-thumb,
+.progressBar:focus-visible::-webkit-slider-thumb {
   opacity: 1;
+}
+
+.progressBar:focus-visible {
+  outline: 2px solid var(--accent-primary);
+  outline-offset: 4px;
 }
 
 @media (max-width: 768px) {

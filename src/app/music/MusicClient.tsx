@@ -15,24 +15,20 @@ export default function MusicClient({ releases }: { releases: any[] }) {
 
   return (
     <div className="container" style={{ paddingTop: '100px', paddingBottom: '60px' }}>
-      <motion.h1 
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-      >
+      <h1 className="animate-fade-in">
         Music Catalog
-      </motion.h1>
+      </h1>
       
       <div style={{ marginTop: '3rem', display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
         {releases.map((release, idx) => {
           const isOpen = openRelease === release.id;
           
           return (
-            <motion.div 
+            <div 
               key={release.id}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: idx * 0.1 }}
+              className="animate-fade-in"
               style={{
+                animationDelay: `${idx * 0.1}s`,
                 background: 'var(--bg-secondary)',
                 borderRadius: '12px',
                 border: '1px solid var(--border-color)',
@@ -40,30 +36,35 @@ export default function MusicClient({ releases }: { releases: any[] }) {
               }}
             >
               {/* Release Header (Accordion Toggle) */}
-              <div 
+              <button 
+                type="button"
                 onClick={() => toggleRelease(release.id)}
+                aria-expanded={isOpen}
+                aria-controls={`tracks-${release.id}`}
                 style={{
                   display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                  width: '100%', textAlign: 'left', color: 'inherit',
                   padding: '1.5rem', cursor: 'pointer', background: isOpen ? 'rgba(255,255,255,0.02)' : 'transparent',
                   transition: 'background 0.3s ease'
                 }}
               >
                 <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
-                  <img src={release.coverUrl || '/logo.png'} alt={release.title} style={{ width: '80px', height: '80px', borderRadius: '8px', objectFit: 'cover', boxShadow: '0 4px 12px rgba(0,0,0,0.5)' }} />
+                  <img src={release.coverUrl || '/logo.png'} alt={`${release.title} cover`} width={80} height={80} style={{ width: '80px', height: '80px', borderRadius: '8px', objectFit: 'cover', boxShadow: '0 4px 12px rgba(0,0,0,0.5)' }} />
                   <div>
                     <div style={{ fontWeight: 700, fontSize: '1.5rem', marginBottom: '0.25rem' }}>{release.title}</div>
                     <div style={{ color: 'var(--accent-primary)', fontSize: '0.875rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em' }}>{release.type}</div>
                   </div>
                 </div>
                 <div style={{ color: 'var(--text-secondary)' }}>
-                  {isOpen ? <ChevronUp size={24} /> : <ChevronDown size={24} />}
+                  {isOpen ? <ChevronUp size={24} aria-hidden="true" /> : <ChevronDown size={24} aria-hidden="true" />}
                 </div>
-              </div>
+              </button>
 
               {/* Tracks List */}
               <AnimatePresence>
                 {isOpen && release.tracks && (
                   <motion.div
+                    id={`tracks-${release.id}`}
                     initial={{ height: 0, opacity: 0 }}
                     animate={{ height: 'auto', opacity: 1 }}
                     exit={{ height: 0, opacity: 0 }}
@@ -99,6 +100,7 @@ export default function MusicClient({ releases }: { releases: any[] }) {
                             
                             <button 
                               onClick={() => currentTrack?.id === track.id ? togglePlayPause() : playTrack(track, release.tracks)}
+                              aria-label={isThisPlaying ? `Pause ${track.title}` : `Play ${track.title}`}
                               style={{
                                 width: '40px', height: '40px', borderRadius: '50%',
                                 background: isThisPlaying ? 'var(--text-primary)' : 'var(--bg-tertiary)', 
@@ -111,7 +113,7 @@ export default function MusicClient({ releases }: { releases: any[] }) {
                               onMouseOver={(e) => e.currentTarget.style.transform = 'scale(1.05)'}
                               onMouseOut={(e) => e.currentTarget.style.transform = 'scale(1)'}
                             >
-                              {isThisPlaying ? <Pause fill="currentColor" size={16} /> : <Play fill="currentColor" size={16} style={{ marginLeft: '2px' }} />}
+                              {isThisPlaying ? <Pause fill="currentColor" size={16} aria-hidden="true" /> : <Play fill="currentColor" size={16} style={{ marginLeft: '2px' }} aria-hidden="true" />}
                             </button>
                           </div>
                         );
@@ -120,7 +122,7 @@ export default function MusicClient({ releases }: { releases: any[] }) {
                   </motion.div>
                 )}
               </AnimatePresence>
-            </motion.div>
+            </div>
           );
         })}
       </div>

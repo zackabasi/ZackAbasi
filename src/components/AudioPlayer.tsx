@@ -52,9 +52,9 @@ export default function AudioPlayer() {
   const hasPrev = currentPlaylist.length > 0 && currentPlaylist.findIndex(t => t.id === currentTrack.id) > 0;
 
   return (
-    <div className={`${styles.playerContainer} ${currentTrack ? styles.playerVisible : ''}`}>
+    <div className={`${styles.playerContainer} ${currentTrack ? styles.playerVisible : ''}`} role="region" aria-label="Music player">
       <div className={styles.trackInfo}>
-        <img src={currentTrack.coverUrl} alt={currentTrack.title} className={styles.cover} />
+        <img src={currentTrack.coverUrl} alt="" width={48} height={48} className={styles.cover} />
         <div>
           <div className={styles.title}>{currentTrack.title}</div>
           <div className={styles.artist}>{currentTrack.artist}</div>
@@ -63,25 +63,27 @@ export default function AudioPlayer() {
 
       <div className={styles.controlsContainer}>
         <div className={styles.controls}>
-          <button className={styles.secondaryBtn} onClick={playPrevious} disabled={!hasPrev} style={{ opacity: hasPrev ? 1 : 0.5, cursor: hasPrev ? 'pointer' : 'default' }}>
-            <SkipBack size={20} fill="currentColor" />
+          <button className={styles.secondaryBtn} onClick={playPrevious} disabled={!hasPrev} aria-label="Previous track" style={{ opacity: hasPrev ? 1 : 0.5, cursor: hasPrev ? 'pointer' : 'default' }}>
+            <SkipBack size={20} fill="currentColor" aria-hidden="true" />
           </button>
-          <button className={styles.playPauseBtn} onClick={togglePlayPause}>
-            {isPlaying ? <Pause size={24} fill="currentColor" /> : <Play size={24} fill="currentColor" style={{ marginLeft: '2px' }} />}
+          <button className={styles.playPauseBtn} onClick={togglePlayPause} aria-label={isPlaying ? `Pause ${currentTrack.title}` : `Play ${currentTrack.title}`}>
+            {isPlaying ? <Pause size={24} fill="currentColor" aria-hidden="true" /> : <Play size={24} fill="currentColor" style={{ marginLeft: '2px' }} aria-hidden="true" />}
           </button>
-          <button className={styles.secondaryBtn} onClick={playNext} disabled={!hasNext} style={{ opacity: hasNext ? 1 : 0.5, cursor: hasNext ? 'pointer' : 'default' }}>
-            <SkipForward size={20} fill="currentColor" />
+          <button className={styles.secondaryBtn} onClick={playNext} disabled={!hasNext} aria-label="Next track" style={{ opacity: hasNext ? 1 : 0.5, cursor: hasNext ? 'pointer' : 'default' }}>
+            <SkipForward size={20} fill="currentColor" aria-hidden="true" />
           </button>
         </div>
-        
+
         <div className={styles.progressContainer}>
           <span className={styles.time}>{formatTime(currentTime)}</span>
-          <input 
-            type="range" 
-            min="0" 
-            max={duration || 100} 
-            value={currentTime} 
+          <input
+            type="range"
+            min="0"
+            max={duration || 100}
+            value={currentTime}
             onChange={handleSeek}
+            aria-label="Seek"
+            aria-valuetext={`${formatTime(currentTime)} of ${formatTime(duration)}`}
             className={styles.progressBar}
             style={{ '--progress': `${(currentTime / (duration || 1)) * 100}%` } as React.CSSProperties}
           />
