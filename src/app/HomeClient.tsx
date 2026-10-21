@@ -145,10 +145,10 @@ export default function HomeClient({
             This project was supported by Meath County Council Arts Office and Creative Ireland through the Professional Artist Development Fund.
           </p>
 
-          <div style={{ display: 'flex', justifyContent: 'center', gap: '2rem', flexWrap: 'wrap', alignItems: 'center', background: 'rgba(10, 10, 10, 0.8)', padding: '0.75rem 1.5rem', borderRadius: '16px', border: '1px solid rgba(255, 255, 255, 0.5)', maxWidth: 'max-content' }}>
-            <img src="/Creative Ireland Logo_Gold.webp" alt="Creative Ireland" style={{ height: '45px', objectFit: 'contain' }} />
-            <img src="/Meath Arts Office Logo.webp" alt="Meath Arts Office" style={{ height: '45px', objectFit: 'contain' }} />
-            <img src="/Meath County Council Logo.webp" alt="Meath County Council" style={{ height: '45px', objectFit: 'contain' }} />
+          <div style={{ display: 'flex', justifyContent: 'center', gap: '2rem', flexWrap: 'wrap', alignItems: 'center', background: 'rgba(10, 10, 10, 0.8)', padding: '0.75rem 1.5rem', borderRadius: '16px', border: '1px solid rgba(255, 255, 255, 0.5)', maxWidth: '100%', boxSizing: 'border-box' }}>
+            <img src="/Creative Ireland Logo_Gold.webp" alt="Creative Ireland" style={{ height: '45px', maxWidth: '100%', objectFit: 'contain' }} />
+            <img src="/Meath Arts Office Logo.webp" alt="Meath Arts Office" style={{ height: '45px', maxWidth: '100%', objectFit: 'contain' }} />
+            <img src="/Meath County Council Logo.webp" alt="Meath County Council" style={{ height: '45px', maxWidth: '100%', objectFit: 'contain' }} />
           </div>
         </div>
       </section>

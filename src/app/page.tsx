@@ -11,8 +11,8 @@ const URL_MAPPING: Record<string, string> = {
   "Nelonen.webp": "https://www.youtube.com/watch?v=-40eUgBRI-M",
   "RTL4.webp": "https://www.youtube.com/watch?v=MfH6QhcHB7g",
   "alarabiya.webp": "https://www.youtube.com/watch?v=7YHf04P0Y-w",
-  "NPO.svg.webp": "https://studio.youtube.com/video/OOvciIVDtcs/edit",
-  "VOX.webp": "https://studio.youtube.com/video/Lve26UZCTfE/edit",
+  "NPO.svg.webp": "https://www.youtube.com/watch?v=OOvciIVDtcs",
+  "VOX.webp": "https://www.youtube.com/watch?v=Lve26UZCTfE",
   "rte.svg.webp": "https://www.tiktok.com/@zackabasi/video/7587822614966455574"
 };
 
