@@ -60,7 +60,7 @@ export default function MyStoryClient({ biography }: { biography: any }) {
         <div style={{ marginBottom: '3rem', width: '100%', borderRadius: '8px', overflow: 'hidden', border: '1px solid var(--border-color)' }}>
           <img 
             src={coverUrl} 
-            alt="A Hurrian hymn tablet from Ugarit, the oldest known written music, with ancient musicians" 
+            alt={biography?.coverImage ? "" : "A Hurrian hymn tablet from Ugarit, the oldest known written music, with ancient musicians"} 
             width={640}
             height={360}
             style={{ width: '100%', height: 'auto', display: 'block' }} 

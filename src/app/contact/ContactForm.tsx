@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import styles from "./contact.module.css";
 
 const TOPICS = [
@@ -14,12 +14,32 @@ export default function ContactForm() {
   const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
   const [topic, setTopic] = useState(TOPICS[0].value);
   const current = TOPICS.find(t => t.value === topic) || TOPICS[0];
+  const successRef = useRef<HTMLHeadingElement>(null);
+  const nameRef = useRef<HTMLInputElement>(null);
+  const restoreFocus = useRef(false);
+
+  // Move keyboard/screen-reader focus to the result instead of dropping it on the page.
+  useEffect(() => {
+    if (status === "success") successRef.current?.focus();
+    if (status === "idle" && restoreFocus.current) {
+      restoreFocus.current = false;
+      nameRef.current?.focus();
+    }
+  }, [status]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setStatus("submitting");
+    if (status === "submitting") return;
 
     const form = e.currentTarget;
+    const message = form.elements.namedItem("message") as HTMLTextAreaElement;
+    if (!message.value.trim()) {
+      message.setCustomValidity("Please write a message.");
+      message.reportValidity();
+      return;
+    }
+
+    setStatus("submitting");
     const formData = new FormData(form);
     formData.append("access_key", process.env.NEXT_PUBLIC_WEB3FORMS_KEY || "YOUR_ACCESS_KEY_HERE");
     formData.append("subject", `New ${current.short} enquiry from zackabasi.com`);
@@ -49,9 +69,9 @@ export default function ContactForm() {
   if (status === "success") {
     return (
       <div className={styles.success} role="status">
-        <h2 className={styles.successTitle}>Message sent</h2>
+        <h2 className={styles.successTitle} ref={successRef} tabIndex={-1}>Message sent</h2>
         <p>Thank you for reaching out. I&rsquo;ll get back to you as soon as I can.</p>
-        <button type="button" className={styles.again} onClick={() => setStatus("idle")}>
+        <button type="button" className={styles.again} onClick={() => { restoreFocus.current = true; setStatus("idle"); }}>
           Send another message
         </button>
       </div>
@@ -83,7 +103,7 @@ export default function ContactForm() {
       <div className={styles.row}>
         <div className={styles.field}>
           <label htmlFor="name" className={styles.label}>Name</label>
-          <input type="text" id="name" name="name" required autoComplete="name" placeholder="Your name" className={styles.input} />
+          <input type="text" id="name" name="name" ref={nameRef} required autoComplete="name" placeholder="Your name" className={styles.input} />
         </div>
         <div className={styles.field}>
           <label htmlFor="email" className={styles.label}>Email</label>
@@ -98,18 +118,16 @@ export default function ContactForm() {
 
       <div className={styles.field}>
         <label htmlFor="message" className={styles.label}>Message</label>
-        <textarea id="message" name="message" required rows={6} placeholder={current.hint} className={styles.input} />
+        <textarea id="message" name="message" required rows={6} placeholder={current.hint} className={styles.input} onInput={(e) => e.currentTarget.setCustomValidity("")} />
       </div>
 
       <input type="checkbox" name="botcheck" className={styles.honeypot} tabIndex={-1} autoComplete="off" aria-hidden="true" />
 
-      <div aria-live="polite">
-        {status === "error" && (
-          <p className={styles.error} role="alert">Your message didn&rsquo;t send. Please check your connection and try again.</p>
-        )}
-      </div>
+      <div className={styles.status} aria-live="assertive">{status === "error" && (
+          <p className={styles.error}>Your message didn&rsquo;t send. Please check your connection and try again.</p>
+        )}</div>
 
-      <button type="submit" className={styles.submit} disabled={status === "submitting"}>
+      <button type="submit" className={styles.submit} aria-disabled={status === "submitting"}>
         {status === "submitting" ? "Sending…" : current.button}
       </button>
     </form>

@@ -10,7 +10,7 @@ const outfit = Outfit({
   variable: "--font-outfit",
 });
 
-const description = "Official website of Zack Abasi, Syrian-Irish composer, guitarist and oud player. Listen to his debut EP Sunrosa and music featured on NBC, RTL 4, NPO, VOX and RTÉ Radio 1.";
+const description = "Zack Abasi, Syrian-Irish composer, guitarist and oud player. Listen to his debut EP Sunrosa and music featured on NBC, RTL 4, NPO, VOX and RTÉ Radio 1.";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.zackabasi.com"),

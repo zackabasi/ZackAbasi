@@ -20,6 +20,17 @@
   margin: 0;
 }
 
+/* Keep keyboard-focused elements clear of the fixed nav (top) and music player (bottom) */
+html {
+  scroll-padding-top: 110px;
+  scroll-padding-bottom: 120px;
+}
+
+/* Nothing in the page (entrance slides, glows) can push it wider than the screen */
+main {
+  overflow-x: clip;
+}
+
 body {
   background-color: var(--bg-primary);
   color: var(--text-primary);
@@ -104,12 +115,13 @@ h2 { font-size: 3rem; letter-spacing: -0.01em; }
 }
 
 .animate-fade-in {
-  animation: fadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation: fadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) backwards;
 }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
+    animation-delay: 0s !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;

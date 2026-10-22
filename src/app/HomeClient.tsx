@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { preload } from "react-dom";
 import styles from "./page.module.css";
 import { useAudio, type Track } from "@/context/AudioContext";
 import { Play } from "lucide-react";
@@ -22,12 +23,19 @@ export default function HomeClient({
   testimonialVideo?: string,
   latestTracks?: Track[]
 }) {
-  const { playTrack } = useAudio();
+  const { playTrack, currentTrack, isPlaying, togglePlayPause } = useAudio();
 
+  // The hero background is the largest thing on first paint; start fetching it with the HTML.
+  preload("/hero-bg.webp", { as: "image", fetchPriority: "high" });
+
+  // Only ever starts the music: if the EP is already loaded it resumes instead of toggling.
   const handlePlayLatest = () => {
-    if (latestTracks.length > 0) {
-      playTrack(latestTracks[0], latestTracks);
+    if (latestTracks.length === 0) return;
+    if (currentTrack && latestTracks.some(t => t.id === currentTrack.id)) {
+      if (!isPlaying) togglePlayPause();
+      return;
     }
+    playTrack(latestTracks[0], latestTracks);
   };
 
   const testimonialEmbed = testimonialVideo ? youtubeEmbed(testimonialVideo) : null;
@@ -77,9 +85,9 @@ export default function HomeClient({
           <Image
             src="/hero-photo.webp"
             alt="Zack Abasi with his Fender Stratocaster"
-            width={861}
-            height={1197}
-            sizes="(max-width: 992px) 290px, 432px"
+            width={1171}
+            height={1543}
+            sizes="(max-width: 992px) 304px, 456px"
             loading="eager"
             fetchPriority="high"
             className={styles.heroImage}
@@ -90,7 +98,17 @@ export default function HomeClient({
       {featuredLogos.length > 0 && (
         <section className={styles.featuredSection} aria-labelledby="featured-title">
           <h2 id="featured-title" className={styles.featuredTitle}>Music featured on</h2>
-          <div className={styles.carouselContainer}>
+          <div
+            className={styles.carouselContainer}
+            onFocus={(e) => {
+              // Keyboard focus: bring the focused logo fully into view inside the strip.
+              if (e.target.matches(":focus-visible")) e.target.scrollIntoView({ inline: "center", block: "nearest" });
+            }}
+            onBlur={(e) => {
+              // Tabbing through the logos scrolls the strip; put it back once focus leaves.
+              if (!e.currentTarget.contains(e.relatedTarget as Node)) e.currentTarget.scrollLeft = 0;
+            }}
+          >
             <div className={styles.carouselTrack}>
               {/* The second set only exists for the seamless loop, so it's hidden from screen readers and the keyboard */}
               {[...featuredLogos, ...featuredLogos].map((logo, idx) => {
@@ -179,7 +197,7 @@ export default function HomeClient({
             <div className={styles.articleCardImageContainer}>
               <img
                 src="/Irish-article.webp"
-                alt="Zack Abasi playing Whiskey in the Jar on electric guitar, from the Irish Post video"
+                alt=""
                 width={400}
                 height={214}
                 loading="lazy"
@@ -207,7 +225,7 @@ export default function HomeClient({
                 <p>He is one of the greatest guitarists I&rsquo;ve met in <span className={styles.quoteEmphasis}>YEARS</span>.</p>
               </blockquote>
               <figcaption className={styles.quoteAttribution}>
-                <cite>Larry Flick</cite>
+                <span className={styles.quoteName}>Larry Flick</span>
                 <span>Former Billboard critic &amp; SiriusXM host</span>
               </figcaption>
             </figure>
@@ -240,7 +258,7 @@ export default function HomeClient({
                 key={idx}
                 className={styles.projectCard}
               >
-                <img src={item.image} alt={`${item.title} album cover`} width={800} height={800} loading="lazy" className={styles.projectCover} />
+                <img src={item.image} alt="" width={800} height={800} loading="lazy" className={styles.projectCover} />
                 <div className={styles.projectBody}>
                   <h3 className={styles.projectTitle}>{item.title}</h3>
                   <p className={styles.projectLink}>View Project &rarr;</p>

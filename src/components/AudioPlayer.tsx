@@ -16,10 +16,14 @@ export default function AudioPlayer() {
     if (!audioElement) return;
 
     const updateTime = () => setCurrentTime(audioElement.currentTime);
-    const updateDuration = () => setDuration(audioElement.duration);
+    const updateDuration = () => setDuration(audioElement.duration || 0);
+    // A new track (or a failed load) clears the old track's time and length.
+    const reset = () => { setCurrentTime(0); setDuration(0); };
 
     audioElement.addEventListener('timeupdate', updateTime);
     audioElement.addEventListener('loadedmetadata', updateDuration);
+    audioElement.addEventListener('durationchange', updateDuration);
+    audioElement.addEventListener('emptied', reset);
 
     // Initial values
     setCurrentTime(audioElement.currentTime);
@@ -28,6 +32,8 @@ export default function AudioPlayer() {
     return () => {
       audioElement.removeEventListener('timeupdate', updateTime);
       audioElement.removeEventListener('loadedmetadata', updateDuration);
+      audioElement.removeEventListener('durationchange', updateDuration);
+      audioElement.removeEventListener('emptied', reset);
     };
   }, [audioElement]);
 

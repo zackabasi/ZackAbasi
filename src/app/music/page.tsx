@@ -41,7 +41,8 @@ export default async function MusicPage() {
         title: track.title,
         artist: track.artist || 'Zack Abasi',
         url: streamUrl(track.audioRef, track.audioUrl),
-        coverUrl: track.coverImage ? sizedImage(track.coverImage, 160) : (release.coverImage ? sizedImage(release.coverImage, 160) : '/logo.png')
+        coverUrl: track.coverImage ? sizedImage(track.coverImage, 160) : (release.coverImage ? sizedImage(release.coverImage, 160) : '/logo.png'),
+        artworkUrl: track.coverImage ? sizedImage(track.coverImage, 512) : (release.coverImage ? sizedImage(release.coverImage, 512) : undefined)
       }))
     }));
   } catch (error) {

@@ -1,5 +1,6 @@
 import { client } from '@/sanity/lib/client';
 import { sizedImage } from '@/sanity/lib/image';
+import type { SanityImageSource } from '@sanity/image-url';
 import { pageMetadata } from '@/lib/seo';
 import GalleryClient from './GalleryClient';
 import fs from 'fs';
@@ -18,10 +19,10 @@ export default async function GalleryPage() {
 
   try {
     const query = `*[_type == "galleryImage"] | order(order asc) { image, title }`;
-    const data = await client.fetch(query);
+    const data: { image?: SanityImageSource; title?: string }[] = await client.fetch(query);
     images = data
-      .filter((item: any) => item.image)
-      .map((item: any, idx: number) => ({
+      .filter((item): item is { image: SanityImageSource; title?: string } => Boolean(item.image))
+      .map((item, idx) => ({
         src: sizedImage(item.image, 900),
         // CMS titles like "Image 1" aren't descriptions, so fall back to a plain one
         alt: item.title && !/^image \d+$/i.test(item.title) ? item.title : `Zack Abasi, photo ${idx + 1}`

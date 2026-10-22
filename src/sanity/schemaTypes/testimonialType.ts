@@ -8,6 +8,7 @@ export const testimonialType = defineType({
     defineField({
       name: 'quote',
       title: 'Quote Text',
+      description: 'Not shown on the website: the homepage shows the Larry Flick quote set in the site code. Ask for a code change to edit it.',
       type: 'text',
       rows: 4
     }),

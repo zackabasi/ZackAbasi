@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, MotionConfig } from "framer-motion";
 import { useAudio } from "@/context/AudioContext";
 import { Play, Pause, ChevronDown, ChevronUp } from "lucide-react";
 
@@ -14,6 +14,7 @@ export default function MusicClient({ releases }: { releases: any[] }) {
   };
 
   return (
+    <MotionConfig reducedMotion="user">
     <div className="container" style={{ paddingTop: '100px', paddingBottom: '60px' }}>
       <h1 className="animate-fade-in">
         Music Catalog
@@ -40,7 +41,7 @@ export default function MusicClient({ releases }: { releases: any[] }) {
                 type="button"
                 onClick={() => toggleRelease(release.id)}
                 aria-expanded={isOpen}
-                aria-controls={`tracks-${release.id}`}
+                aria-controls={isOpen ? `tracks-${release.id}` : undefined}
                 style={{
                   display: 'flex', alignItems: 'center', justifyContent: 'space-between',
                   width: '100%', textAlign: 'left', color: 'inherit',
@@ -49,7 +50,7 @@ export default function MusicClient({ releases }: { releases: any[] }) {
                 }}
               >
                 <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
-                  <img src={release.coverUrl || '/logo.png'} alt={`${release.title} cover`} width={80} height={80} style={{ width: '80px', height: '80px', borderRadius: '8px', objectFit: 'cover', boxShadow: '0 4px 12px rgba(0,0,0,0.5)' }} />
+                  <img src={release.coverUrl || '/logo.png'} alt="" width={80} height={80} style={{ width: '80px', height: '80px', borderRadius: '8px', objectFit: 'cover', boxShadow: '0 4px 12px rgba(0,0,0,0.5)' }} />
                   <div>
                     <div style={{ fontWeight: 700, fontSize: '1.5rem', marginBottom: '0.25rem' }}>{release.title}</div>
                     <div style={{ color: 'var(--accent-primary)', fontSize: '0.875rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em' }}>{release.type}</div>
@@ -127,5 +128,6 @@ export default function MusicClient({ releases }: { releases: any[] }) {
         })}
       </div>
     </div>
+    </MotionConfig>
   );
 }

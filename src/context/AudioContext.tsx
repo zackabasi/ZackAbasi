@@ -8,6 +8,7 @@ export type Track = {
   artist: string;
   url: string;
   coverUrl: string;
+  artworkUrl?: string; // larger cover for the lock screen
 };
 
 type AudioContextType = {
@@ -71,7 +72,11 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
   const togglePlayPause = () => {
     const audio = audioRef.current;
     if (!audio || !stateRef.current.currentTrack) return;
-    if (audio.paused) {
+    if (audio.error) {
+      // The last load failed (e.g. connection dropped): reload the track and try again.
+      audio.load();
+      startPlayback(audio);
+    } else if (audio.paused) {
       startPlayback(audio);
     } else {
       audio.pause();
@@ -111,8 +116,8 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
     audio.addEventListener('ended', onEnded);
 
     if ('mediaSession' in navigator) {
-      navigator.mediaSession.setActionHandler('play', () => handlersRef.current.togglePlayPause());
-      navigator.mediaSession.setActionHandler('pause', () => handlersRef.current.togglePlayPause());
+      navigator.mediaSession.setActionHandler('play', () => { if (audio.paused || audio.error) handlersRef.current.togglePlayPause(); });
+      navigator.mediaSession.setActionHandler('pause', () => audio.pause());
       navigator.mediaSession.setActionHandler('nexttrack', () => handlersRef.current.playNext());
       navigator.mediaSession.setActionHandler('previoustrack', () => handlersRef.current.playPrevious());
     }
@@ -128,7 +133,8 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
   // Track title and artwork on the phone's lock screen and in the browser's media controls.
   useEffect(() => {
     if (!currentTrack || !('mediaSession' in navigator) || typeof MediaMetadata === 'undefined') return;
-    const artwork = currentTrack.coverUrl ? [{ src: new URL(currentTrack.coverUrl, window.location.href).href }] : [];
+    const cover = currentTrack.artworkUrl || currentTrack.coverUrl;
+    const artwork = cover ? [{ src: new URL(cover, window.location.href).href }] : [];
     navigator.mediaSession.metadata = new MediaMetadata({ title: currentTrack.title, artist: currentTrack.artist, artwork });
   }, [currentTrack]);
 

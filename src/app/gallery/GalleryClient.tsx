@@ -1,5 +1,7 @@
 "use client";
 
+import styles from "./gallery.module.css";
+
 export default function GalleryClient({ images }: { images: { src: string; alt: string }[] }) {
   return (
     <div className="container" style={{ paddingTop: '100px', paddingBottom: '60px' }}>
@@ -21,13 +23,8 @@ export default function GalleryClient({ images }: { images: { src: string; alt: 
           images.map((image, idx) => (
             <div 
               key={idx}
-              className="animate-fade-in"
-              style={{
-                animationDelay: `${idx * 0.1}s`,
-                aspectRatio: '1',
-                borderRadius: '8px',
-                overflow: 'hidden'
-              }}
+              className={`animate-fade-in ${styles.tile}`}
+              style={{ animationDelay: `${idx * 0.1}s` }}
             >
               <img src={image.src} alt={image.alt} width={900} height={900} loading={idx < 3 ? 'eager' : 'lazy'} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
             </div>

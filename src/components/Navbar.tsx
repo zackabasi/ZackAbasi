@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Menu, X } from 'lucide-react';
@@ -18,6 +18,7 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const pathname = usePathname();
+  const menuButtonRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -38,7 +39,12 @@ export default function Navbar() {
       document.body.style.overflow = 'unset';
     }
     if (!mobileMenuOpen) return;
-    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') setMobileMenuOpen(false); };
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setMobileMenuOpen(false);
+        menuButtonRef.current?.focus();
+      }
+    };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
   }, [mobileMenuOpen]);
@@ -79,6 +85,7 @@ export default function Navbar() {
       </div>
 
       <button 
+        ref={menuButtonRef}
         className={styles.mobileMenuButton} 
         onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
         aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
@@ -89,7 +96,15 @@ export default function Navbar() {
       </button>
 
       {mobileMenuOpen && (
-        <div className={styles.mobileMenu} id="mobile-menu">
+        <div
+          className={styles.mobileMenu}
+          id="mobile-menu"
+          onBlur={(e) => {
+            // Tabbing out of the open menu closes it rather than moving into the hidden page behind
+            const next = e.relatedTarget as Node | null;
+            if (next && !e.currentTarget.contains(next) && !menuButtonRef.current?.contains(next)) setMobileMenuOpen(false);
+          }}
+        >
           {navItems.map((item) => (
             <Link 
               key={item.name} 

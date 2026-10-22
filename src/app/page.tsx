@@ -2,6 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import { client } from '@/sanity/lib/client';
 import { sizedImage } from '@/sanity/lib/image';
+import type { SanityImageSource } from '@sanity/image-url';
 import { streamUrl, SUNROSA_TRACKS } from '@/lib/streams';
 import { pageMetadata, SOCIAL_PROFILES } from '@/lib/seo';
 import HomeClient from './HomeClient';
@@ -9,7 +10,7 @@ import HomeClient from './HomeClient';
 export const revalidate = 60; // Fetch fresh data every 60 seconds
 
 export const metadata = pageMetadata({
-  description: "Official website of Zack Abasi, Syrian-Irish composer, guitarist and oud player. Listen to his debut EP Sunrosa and music featured on NBC, RTL 4, NPO, VOX and RTÉ Radio 1.",
+  description: "Zack Abasi, Syrian-Irish composer, guitarist and oud player. Listen to his debut EP Sunrosa and music featured on NBC, RTL 4, NPO, VOX and RTÉ Radio 1.",
   path: "/",
 });
 
@@ -131,14 +132,16 @@ export default async function Home() {
         coverImage
       }
     }`;
-    const rData = await client.fetch(rQuery);
+    type ReleaseTrack = { _id: string; title: string; artist?: string; audioUrl?: string; audioRef?: string; coverImage?: SanityImageSource };
+    const rData: { coverImage?: SanityImageSource; tracks?: ReleaseTrack[] } | null = await client.fetch(rQuery);
     if (rData && rData.tracks && rData.tracks.length > 0) {
-      latestTracks = rData.tracks.map((track: any) => ({
+      latestTracks = rData.tracks.map((track) => ({
         id: track._id,
         title: track.title,
         artist: track.artist || 'Zack Abasi',
         url: streamUrl(track.audioRef, track.audioUrl),
-        coverUrl: track.coverImage ? sizedImage(track.coverImage, 160) : (rData.coverImage ? sizedImage(rData.coverImage, 160) : '/logo.png')
+        coverUrl: track.coverImage ? sizedImage(track.coverImage, 160) : (rData.coverImage ? sizedImage(rData.coverImage, 160) : '/logo.png'),
+        artworkUrl: track.coverImage ? sizedImage(track.coverImage, 512) : (rData.coverImage ? sizedImage(rData.coverImage, 512) : undefined)
       }));
     }
   } catch (error) {
