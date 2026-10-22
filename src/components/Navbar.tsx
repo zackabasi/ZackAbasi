@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Menu, X } from 'lucide-react';
@@ -18,6 +18,7 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const pathname = usePathname();
+  const menuButtonRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -37,6 +38,15 @@ export default function Navbar() {
     } else {
       document.body.style.overflow = 'unset';
     }
+    if (!mobileMenuOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setMobileMenuOpen(false);
+        menuButtonRef.current?.focus();
+      }
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
   }, [mobileMenuOpen]);
 
   if (pathname.startsWith('/studio')) return null;
@@ -46,7 +56,7 @@ export default function Navbar() {
       <Link href="/" aria-label="Home" className={styles.logoLink} onClick={() => setMobileMenuOpen(false)}>
         <img 
           src="/logo.png" 
-          alt="Zack Abasi Logo" 
+          alt="Zack Abasi" 
           className={styles.logoImg}
           onError={(e) => {
             // Fallback to text if the image is missing
@@ -67,6 +77,7 @@ export default function Navbar() {
             key={item.name} 
             href={item.path} 
             className={`${styles.link} ${pathname === item.path ? styles.active : ''}`}
+            aria-current={pathname === item.path ? 'page' : undefined}
           >
             {item.name}
           </Link>
@@ -74,20 +85,32 @@ export default function Navbar() {
       </div>
 
       <button 
+        ref={menuButtonRef}
         className={styles.mobileMenuButton} 
         onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-        aria-label="Toggle mobile menu"
+        aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
+        aria-expanded={mobileMenuOpen}
+        aria-controls="mobile-menu"
       >
-        {mobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
+        {mobileMenuOpen ? <X size={28} aria-hidden="true" /> : <Menu size={28} aria-hidden="true" />}
       </button>
 
       {mobileMenuOpen && (
-        <div className={styles.mobileMenu}>
+        <div
+          className={styles.mobileMenu}
+          id="mobile-menu"
+          onBlur={(e) => {
+            // Tabbing out of the open menu closes it rather than moving into the hidden page behind
+            const next = e.relatedTarget as Node | null;
+            if (next && !e.currentTarget.contains(next) && !menuButtonRef.current?.contains(next)) setMobileMenuOpen(false);
+          }}
+        >
           {navItems.map((item) => (
             <Link 
               key={item.name} 
               href={item.path} 
               className={`${styles.mobileLink} ${pathname === item.path ? styles.active : ''}`}
+              aria-current={pathname === item.path ? 'page' : undefined}
               onClick={() => setMobileMenuOpen(false)}
             >
               {item.name}

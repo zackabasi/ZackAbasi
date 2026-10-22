@@ -1,40 +1,16 @@
 import { client } from '@/sanity/lib/client';
-import { urlFor } from '@/sanity/lib/image';
+import { sizedImage } from '@/sanity/lib/image';
+import { streamUrl, SUNROSA_FALLBACK_RELEASE } from '@/lib/streams';
+import { pageMetadata } from '@/lib/seo';
 import MusicClient from './MusicClient';
 
 export const revalidate = 60; // revalidate every 60 seconds
 
-const FALLBACK_RELEASES = [
-  {
-    id: "ep-sunrosa",
-    title: "Sunrosa EP",
-    type: "EP",
-    coverUrl: "/Music/Sunrosa EP artwork.webp",
-    tracks: [
-      {
-        id: "sunrosa-1",
-        title: "Mediterranea",
-        artist: "Zack Abasi",
-        url: "/Music/Mediterranea - Zack Abasi.mp3",
-        coverUrl: "/Music/Sunrosa EP artwork.webp"
-      },
-      {
-        id: "sunrosa-2",
-        title: "Harisa Harisa",
-        artist: "Zack Abasi",
-        url: "/Music/Harisa Harisa - Zack Abasi.mp3",
-        coverUrl: "/Music/Sunrosa EP artwork.webp"
-      },
-      {
-        id: "sunrosa-3",
-        title: "Azura Mira",
-        artist: "Zack Abasi",
-        url: "/Music/Azura Mira - Zack Abasi.mp3",
-        coverUrl: "/Music/Sunrosa EP artwork.webp"
-      }
-    ]
-  }
-];
+export const metadata = pageMetadata({
+  title: "Music",
+  description: "Listen to Sunrosa, the debut instrumental EP by Zack Abasi: Mediterranea, Azura Mira, Sunrosa, Harissa Harisa and Alma Señor.",
+  path: "/music",
+});
 
 export default async function MusicPage() {
   const query = `*[_type == "release"] | order(_createdAt desc) {
@@ -47,10 +23,11 @@ export default async function MusicPage() {
       title,
       artist,
       "audioUrl": audioFile.asset->url,
+      "audioRef": audioFile.asset._ref,
       coverImage
     }
   }`;
-  
+
   let releases = [];
   try {
     const sanityReleases = await client.fetch(query);
@@ -58,13 +35,14 @@ export default async function MusicPage() {
       id: release._id,
       title: release.title,
       type: release.type,
-      coverUrl: release.coverImage ? urlFor(release.coverImage).url() : '/logo.png',
+      coverUrl: release.coverImage ? sizedImage(release.coverImage, 240) : '/logo.png',
       tracks: (release.tracks || []).map((track: any) => ({
         id: track._id,
         title: track.title,
         artist: track.artist || 'Zack Abasi',
-        url: track.audioUrl,
-        coverUrl: track.coverImage ? urlFor(track.coverImage).url() : (release.coverImage ? urlFor(release.coverImage).url() : '/logo.png')
+        url: streamUrl(track.audioRef, track.audioUrl),
+        coverUrl: track.coverImage ? sizedImage(track.coverImage, 160) : (release.coverImage ? sizedImage(release.coverImage, 160) : '/logo.png'),
+        artworkUrl: track.coverImage ? sizedImage(track.coverImage, 512) : (release.coverImage ? sizedImage(release.coverImage, 512) : undefined)
       }))
     }));
   } catch (error) {
@@ -72,7 +50,7 @@ export default async function MusicPage() {
   }
 
   // Use fallback if Sanity is empty
-  const dataToPass = releases.length > 0 ? releases : FALLBACK_RELEASES;
+  const dataToPass = releases.length > 0 ? releases : [SUNROSA_FALLBACK_RELEASE];
 
   return <MusicClient releases={dataToPass} />;
 }

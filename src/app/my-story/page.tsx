@@ -1,8 +1,15 @@
 import { client } from '@/sanity/lib/client';
-import { urlFor } from '@/sanity/lib/image';
+import { sizedImage } from '@/sanity/lib/image';
+import { pageMetadata } from '@/lib/seo';
 import MyStoryClient from './MyStoryClient';
 
 export const revalidate = 60;
+
+export const metadata = pageMetadata({
+  title: "My Story",
+  description: "Zack Abasi was born in Latakia, Syria, beside ancient Ugarit, where the oldest known written music was found. This is his story.",
+  path: "/my-story",
+});
 
 export default async function MyStoryPage() {
   let biography = null;
@@ -13,7 +20,7 @@ export default async function MyStoryPage() {
     if (data) {
       biography = {
         header: data.header,
-        coverImage: data.coverImage ? urlFor(data.coverImage).url() : null,
+        coverImage: data.coverImage ? sizedImage(data.coverImage, 1600) : null,
         content: data.content
       };
     }

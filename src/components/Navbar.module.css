@@ -15,7 +15,6 @@
 .scrolled {
   background: rgba(10, 10, 10, 0.85);
   backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
   border-bottom: 1px solid var(--border-color);
 }
 
@@ -72,7 +71,6 @@
   height: 100vh;
   background: rgba(10, 10, 10, 0.98);
   backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
   z-index: 1000;
   flex-direction: column;
   justify-content: center;
